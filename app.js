@@ -18,6 +18,8 @@ if(process.env.NODE_ENV=='development'){
 const userRouter=require('./routes/userRoutes');
 
 
+//Global middleware to parse JSON request bodies
+app.use(express.json());
 
 //Global middleware for protection
 app.use(cors());

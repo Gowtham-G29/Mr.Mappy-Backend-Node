@@ -25,6 +25,7 @@ exports.signUp = async (req, res, next) => {
             httpOnly: true
         }
         res.cookie('jwt', token, cookieOptions);
+        
         res.status(201).json({
             status: 'Success',
             token,
