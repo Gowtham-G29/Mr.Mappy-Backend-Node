@@ -145,8 +145,6 @@ exports.restrictTo = (...roles) => {
                 status: 'fail',
                 message: 'You dont have permission to perform this action !'
             });
-
-
         }
         next();
     }
