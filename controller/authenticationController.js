@@ -146,7 +146,8 @@ exports.restrictTo = (...roles) => {
                 message: 'You dont have permission to perform this action !'
             });
 
-            next();
+
         }
+        next();
     }
 }
