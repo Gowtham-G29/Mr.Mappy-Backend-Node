@@ -110,30 +110,43 @@ exports.protect = async (req, res, next) => {
         //verify the token
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
         //check the user still exists
-        const currentUser=await User.findById(decoded.id);
-        if(!currentUser){
+        const currentUser = await User.findById(decoded.id);
+        if (!currentUser) {
             return res.status(401).json({
-                status:'fail',
-                message:'The user belonging to this token no longer exists'
+                status: 'fail',
+                message: 'The user belonging to this token no longer exists'
             });
         }
 
         //Check if the user change the password after the token was issued
-        if(currentUser.changedPasswordAfter(decoded.iat)){
+        if (currentUser.changedPasswordAfter(decoded.iat)) {
             return res.status(401).json({
-                status:'fail',
-                message:'User recently changed the password'
+                status: 'fail',
+                message: 'User recently changed the password'
             });
         }
-        
+
         //grant access to the protected route
-        req.user=currentUser;
+        req.user = currentUser;
         next();
 
     } catch (error) {
         res.status(500).json({
-            status:'fail',
-            message:error.message
+            status: 'fail',
+            message: error.message
         })
+    }
+};
+
+exports.restrictTo = (...roles) => {
+    return (res, req, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({
+                status: 'fail',
+                message: 'You dont have permission to perform this action !'
+            });
+
+            next();
+        }
     }
 }
