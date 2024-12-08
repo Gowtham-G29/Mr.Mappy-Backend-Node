@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema({
             message: 'Password are not same!'
         }
     },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
     //for deactive the account or delete the account
     activate: {
         type: Boolean,
@@ -49,13 +52,28 @@ const userSchema = new mongoose.Schema({
 });
 
 //Encrypt the plain password
-userSchema.pre('save', async function (next){
+userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     //hash the password with cost of 12 rounds
     this.password = await bcrypt.hash(this.password, 12);
-    this.passwordConfirm=undefined;
+    this.passwordConfirm = undefined;
     next();
-})
+});
+
+//verifying jwt
+//for login password check
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter=function(JWTTimestamp){
+    if(this.passwordChangedAt){
+        const changedTimestamp=parseInt(this.passwordChangedAt.getTime()/1000,10);
+        return JWTTimestamp<changedTimestamp;
+    }
+    return false;  // false means not changed
+
+}
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

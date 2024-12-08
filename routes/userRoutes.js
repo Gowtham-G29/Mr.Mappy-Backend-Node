@@ -5,6 +5,7 @@ const userRouter=express.Router();
 
 //Routes
 userRouter.post('/signup',authController.signUp);
+userRouter.post('/login',authController.login);
 
 
 
