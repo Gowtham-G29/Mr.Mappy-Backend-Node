@@ -16,6 +16,7 @@ if(process.env.NODE_ENV=='development'){
 
 //Import routes
 const userRouter=require('./routes/userRoutes');
+const activityRouter=require('./routes/activityRoutes');
 
 
 //Global middleware to parse JSON request bodies
@@ -40,6 +41,7 @@ app.use(compression());
 
 //Use the route as Middlewares
 app.use('/api/v1/users',userRouter);
+app.use('/api/v1/activities',activityRouter);
 
 
 

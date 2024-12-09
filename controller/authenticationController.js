@@ -99,9 +99,10 @@ exports.login = async (req, res, next) => {
 exports.protect = async (req, res, next) => {
     try {
         let token;
-        if (req.header.authorization && req.headers.authorization.startsWith('Bearer')) {
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {// define the query authorization and token in headers
             token = req.headers.authorization.split(' ')[1];
         }
+        console.log(token)
 
         if (!token) {
             return res.status(401).json({
@@ -128,6 +129,7 @@ exports.protect = async (req, res, next) => {
             });
         }
 
+        console.log(currentUser);
         //grant access to the protected route
         req.user = currentUser;
         next();
@@ -234,16 +236,16 @@ exports.resetPassword = async (req, res, next) => {
             httpOnly: true
         }
 
-        res.cookie('jwt',token,cookieOptions);
+        res.cookie('jwt', token, cookieOptions);
         res.status(201).json({
-            status:'Success',
+            status: 'Success',
             token
         });
 
     } catch (error) {
         return res.status(500).json({
-            status:'fail',
-            message:error.message|| 'Something went Wrong'
+            status: 'fail',
+            message: error.message || 'Something went Wrong'
         });
     }
 }
