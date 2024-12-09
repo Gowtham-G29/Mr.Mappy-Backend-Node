@@ -73,7 +73,13 @@ exports.login = async (req, res, next) => {
                 message: 'Invalid password'
             });
         }
-
+        //check the deactivation status
+        if (!user.activate) {
+            return res.status(401).json({
+                status: 'Fail',
+                message: 'You account has be deactivated or deleted please contact administrator'
+            })
+        }
         const token = signToken(user._id);
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
