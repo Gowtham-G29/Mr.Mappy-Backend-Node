@@ -13,13 +13,8 @@ userRouter.post('/forgotPassword', authController.forgotPassword);
 //resetPassword
 userRouter.patch('/resetPassword/:token',authController.resetPassword);
 
-
-
-
-
-
-
-
+//update current user Password
+userRouter.patch('/updateCurrentUserPassword',authController.protect,authController.updateCurrentUserPassword)
 
 
 
