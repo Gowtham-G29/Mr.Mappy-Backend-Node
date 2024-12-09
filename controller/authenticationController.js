@@ -1,6 +1,7 @@
 const User = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const Email = require('../utils/email');
 
 
 //send Token if all the logging conditions are satisfied
@@ -17,6 +18,8 @@ exports.signUp = async (req, res, next) => {
         const newUser = await User.create(req.body);
 
         //sending the welcome email for the registeration
+        const url = `${req.protocol}://${req.get('host')}/`; //replace as we want
+        await new Email(newUser, url).sendWelcome();
 
         //store jwt in cookie along with response 
         const token = signToken(newUser._id);
@@ -44,7 +47,6 @@ exports.signUp = async (req, res, next) => {
 };
 
 //Login controller middleware
-
 exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -138,6 +140,7 @@ exports.protect = async (req, res, next) => {
     }
 };
 
+
 exports.restrictTo = (...roles) => {
     return (res, req, next) => {
         if (!roles.includes(req.user.role)) {
@@ -147,5 +150,100 @@ exports.restrictTo = (...roles) => {
             });
         }
         next();
+    }
+};
+
+//forgot password
+exports.forgotPassword = async (req, res, next) => {
+    try {
+
+        console.log(req.body)
+        //1)Get user based on the posted email
+        const user = await User.findOne({ email: req.body.email });
+        console.log(user);
+        if (!user) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'There is no user with that Email address'
+            });
+        }
+        //2)Generate random reset token
+        const resetToken = user.createPasswordResetToken();
+        await user.save({ validateBeforeSave: false });
+
+        //3)send it to user's email
+        try {
+            const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+            await new Email(user, resetURL).sendPasswordReset();
+            res.status(200).json({
+                status: 'Success',
+                message: 'reset link has been send to mail'
+            });
+
+        } catch (error) {
+            user.passwordResetToken = undefined;
+            user.passwordResetExpires = undefined;
+            await user.save({ validateBeforeSave: false });
+
+            return res.status(500).json({
+                status: 'fail',
+                message: error.message
+            });
+
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: error.message || 'Something went wrong'
+        });
+    }
+};
+
+
+//resetPassword
+exports.resetPassword = async (req, res, next) => {
+    try {
+        //get the user based on the token
+        const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+
+        //find the user based on the reset token in the database and check the expiry of the token
+        const user = await User.findOne({
+            passwordResetToken: hashedToken,
+            passwordResetExpires: { $gt: Date.now() }
+        });
+
+        //2)if Token has not expired , and there is a user ,set the new password
+        if (!user) {
+            throw Error('Token is Invalid or Has been Expired');
+            next();
+        }
+        //set new password
+        user.password = req.body.password;
+        user.passwordConfirm = req.body.passwordConfirm;
+        user.passwordResetExpires = undefined;
+        user.passwordResetToken = undefined;
+        await user.save();
+
+        //3)Update changepasswordAt property for the User --->this is in the global function
+
+        //4)Log the user and send JWT
+        const token = signToken(user._id);
+        const cookieOptions = {
+            expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+            secure: true,
+            httpOnly: true
+        }
+
+        res.cookie('jwt',token,cookieOptions);
+        res.status(201).json({
+            status:'Success',
+            token
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status:'fail',
+            message:error.message|| 'Something went Wrong'
+        });
     }
 }
