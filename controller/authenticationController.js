@@ -95,7 +95,9 @@ exports.login = async (req, res, next) => {
     } catch (error) {
         res.status(500).json({
             status: error.status,
-            message: error.message
+            message: error.message,
+            results: 'User Already Registered '
+
         });
     }
 };
