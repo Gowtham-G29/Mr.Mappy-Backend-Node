@@ -50,15 +50,11 @@ const activitySchema = new mongoose.Schema({
     },
     lat: {
         type: Number,
-        required: true,
-        min: -90,
-        max: 90
+        required: true
     },
     lng: {
         type: Number,
-        required: true,
-        min: -180,
-        max: 180
+        required: true
     },
     activityTime: {
         type: Date,
