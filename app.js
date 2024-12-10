@@ -22,14 +22,9 @@ const activityRouter = require('./routes/activityRoutes');
 
 //Global middleware to parse JSON request bodies
 app.use(express.json());
-app.use(cookieParser());
 
 
-//Global middleware for protection
-app.use(cors({
-    origin: 'http://localhost:5173',  // Your frontend's URL (update if using another URL)
-    credentials: true
-}));
+
 
 app.use(helmet());
 const limiter = rateLimit({
@@ -43,7 +38,13 @@ app.use(xss());
 app.use(hpp());
 app.use(compression());
 
+app.use(cookieParser());
 
+//Global middleware for protection
+app.use(cors({
+    origin: 'http://localhost:5173',  // Your frontend's URL (update if using another URL)
+    credentials: true
+}));
 
 
 //Use the route as Middlewares

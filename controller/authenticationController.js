@@ -114,7 +114,8 @@ exports.protect = async (req, res, next) => {
 
         // for production
 
-        console.log('h1:', req.cookie)
+        console.log('h1:', req.cookie.jwt)
+
         if (req.cookies.jwt) {
             token = req.cookies.jwt
         }
