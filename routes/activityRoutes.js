@@ -2,7 +2,6 @@ const express=require('express');
 const activityController=require('../controller/activityController');
 const authenticationController=require('../controller/authenticationController');
 
-
 const activityRouter=express.Router();
 
 

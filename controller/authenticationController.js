@@ -26,7 +26,7 @@ exports.signUp = async (req, res, next) => {
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             secure: true,  //only need for Production
-            httpOnly: false
+            httpOnly: true
         }
         res.cookie('jwt', token, cookieOptions);
 
@@ -84,7 +84,7 @@ exports.login = async (req, res, next) => {
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             secure: true,
-            httpOnly: false
+            httpOnly: true
         }
         res.cookie('jwt', token, cookieOptions);
         res.status(200).json({
@@ -106,15 +106,18 @@ exports.login = async (req, res, next) => {
 exports.protect = async (req, res, next) => {
     try {
         let token;
-        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {// define the query authorization and token in headers
-            token = req.headers.authorization.split(' ')[1];
-        }
+        // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {// define the query authorization and token in headers
+        //     token = req.headers.authorization.split(' ')[1];
+        // }
 
         // for production
 
-        // if (req.cookie.jwt) {
-        //     token = req.cookie.jwt
-        // }
+        console.log('h1:', req.cookie)
+        if (req.cookies.jwt) {
+            token = req.cookies.jwt
+        }
+
+        console.log(token);
 
 
 
