@@ -48,13 +48,13 @@ const activitySchema = new mongoose.Schema({
         required: true,
         enum: ['Money spending', 'Workout', 'Hangout', 'Visiting']
     },
-    latitude: {
+    lat: {
         type: Number,
         required: true,
         min: -90,
         max: 90
     },
-    longitude: {
+    lng: {
         type: Number,
         required: true,
         min: -180,
