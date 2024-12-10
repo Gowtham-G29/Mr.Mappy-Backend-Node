@@ -27,7 +27,7 @@ exports.signUp = async (req, res, next) => {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             secure: true,  //only need for Production
             httpOnly: true,
-            sameSite:'none'
+            sameSite: 'none'
         }
         res.cookie('jwt', token, cookieOptions);
 
@@ -86,7 +86,7 @@ exports.login = async (req, res, next) => {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
             secure: true,
             httpOnly: true,
-            sameSite:'none'
+            sameSite: 'none'
         }
         res.cookie('jwt', token, cookieOptions);
         res.status(200).json({
@@ -114,11 +114,32 @@ exports.protect = async (req, res, next) => {
 
         // for production
 
-        console.log('h1:', req.headers.cookie)
 
-        if (req.cookies.jwt) {
-            token = req.cookies.jwt
+        const parseCookies = (cookieHeader) => {
+            const cookies = {};
+            if (cookieHeader) {
+                cookieHeader.split(';').forEach(cookie => {
+                    const [name, value] = cookie.split('=');
+                    cookies[name.trim()] = decodeURIComponent(value);
+                });
+            }
+            return cookies;
+        };
+        // Manually parse cookies
+        const cookies = parseCookies(req.headers.cookie);
+        console.log('Parsed Cookies:', cookies);
+
+        // Access the JWT token
+        if (cookies.jwt) {
+            token = cookies.jwt;
         }
+
+
+        // console.log('h1:', req.headers.cookie)
+
+        // if (req.cookies.jwt) {
+        //     token = req.cookies.jwt
+        // }
 
         console.log(token);
 
