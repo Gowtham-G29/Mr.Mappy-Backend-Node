@@ -46,7 +46,7 @@ const activitySchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['money_spending', 'workout', 'hangout', 'visiting']
+        enum: ['Money spending', 'Workout', 'Hangout', 'Visiting']
     },
     latitude: {
         type: Number,
