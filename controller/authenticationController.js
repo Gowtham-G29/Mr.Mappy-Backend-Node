@@ -108,13 +108,13 @@ exports.login = async (req, res, next) => {
 exports.protect = async (req, res, next) => {
     try {
         let token;
+        //for the development
+
         // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {// define the query authorization and token in headers
         //     token = req.headers.authorization.split(' ')[1];
         // }
 
         // for production
-
-
         const parseCookies = (cookieHeader) => {
             const cookies = {};
             if (cookieHeader) {
@@ -133,9 +133,6 @@ exports.protect = async (req, res, next) => {
         if (cookies.jwt) {
             token = cookies.jwt;
         }
-
-
-        // console.log('h1:', req.headers.cookie)
 
         // if (req.cookies.jwt) {
         //     token = req.cookies.jwt
