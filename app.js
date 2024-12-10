@@ -25,10 +25,10 @@ app.use(express.json());
 
 
 //Global middleware for protection
-app.use(cors({
-    origin: 'http://localhost:5173',  // Your frontend's URL (update if using another URL)
-    credentials: true
-}));
+// app.use(cors({
+//     origin: 'http://localhost:5173',  // Your frontend's URL (update if using another URL)
+//     credentials: true
+// }));
 app.use(helmet());
 const limiter = rateLimit({
     max: 100,

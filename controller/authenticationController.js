@@ -41,7 +41,7 @@ exports.signUp = async (req, res, next) => {
     } catch (err) {
         res.status(404).json({
             status: 'fail',
-            message: err.message
+            message: 'User Already Registered'
         })
     }
 };
@@ -95,8 +95,7 @@ exports.login = async (req, res, next) => {
     } catch (error) {
         res.status(500).json({
             status: error.status,
-            message: error.message,
-            results: 'User Already Registered '
+            message: error.message
 
         });
     }
