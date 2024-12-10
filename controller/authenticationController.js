@@ -83,8 +83,8 @@ exports.login = async (req, res, next) => {
         const token = signToken(user._id);
         const cookieOptions = {
             expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-            secure: true,
-            httpOnly: true
+            secure: false,
+            httpOnly: false
         }
         res.cookie('jwt', token, cookieOptions);
         res.status(200).json({
@@ -115,7 +115,7 @@ exports.protect = async (req, res, next) => {
         //     token = req.cookie.jwt
         // }
 
-        
+
 
         if (!token) {
             return res.status(401).json({
