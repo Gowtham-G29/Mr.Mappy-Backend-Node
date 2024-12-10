@@ -8,6 +8,7 @@ const xss=require('xss-clean');
 const hpp=require('hpp');
 const compression=require('compression');
 const cors=require('cors');//prevent cross origin requests
+const cookieParser=require('cookie-parser');// get the token form the cookie
 
 //Middleware for logging in development 
 if(process.env.NODE_ENV=='development'){
@@ -21,6 +22,7 @@ const activityRouter=require('./routes/activityRoutes');
 
 //Global middleware to parse JSON request bodies
 app.use(express.json());
+
 
 //Global middleware for protection
 app.use(cors());
