@@ -142,9 +142,7 @@ exports.getUserDetails = async (req, res, next) => {
         return res.status(200).json({
             status: 'Success',
             message: 'User Details',
-            data: {
-                user
-            }
+            user
         })
     } catch (error) {
         return res.status(500).json({
