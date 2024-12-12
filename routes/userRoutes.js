@@ -17,13 +17,16 @@ userRouter.patch('/resetPassword/:token', authController.resetPassword);
 userRouter.patch('/updateCurrentUserPassword', authController.protect, authController.updateCurrentUserPassword)
 
 //Upload profile image
-userRouter.patch('/updateMe', authController.protect, userController.uploadUserPhoto, userController.resizeUserPhoto,userController.updateMe);
+userRouter.patch('/updateMe', authController.protect, userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 
 //delete or deactivate the account
-userRouter.patch('/deleteMe',authController.protect,userController.deleteMe);
+userRouter.patch('/deleteMe', authController.protect, userController.deleteMe);
 
-userRouter.post('/logout',authController.clearCookieLogout);
+//delete the cookie form the backend
+userRouter.post('/logout', authController.clearCookieLogout);
 
+//get the details
+userRouter.get('/getMe', authController.protect, userController.getUserDetails);
 
 module.exports = userRouter;
 

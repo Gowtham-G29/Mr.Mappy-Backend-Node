@@ -127,4 +127,30 @@ exports.deleteMe = async (req, res, next) => {
         });
 
     }
+};
+
+exports.getUserDetails = async (req, res, next) => {
+    try {
+
+        if (!req.user) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'User Not found'
+            })
+        };
+        const user = await User.findById(req.user._id);
+        return res.status(200).json({
+            status: 'Success',
+            message: 'User Details',
+            data: {
+                user
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: error.message
+        })
+
+    }
 }
