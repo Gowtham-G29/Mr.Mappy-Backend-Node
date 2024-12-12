@@ -22,6 +22,8 @@ userRouter.patch('/updateMe', authController.protect, userController.uploadUserP
 //delete or deactivate the account
 userRouter.patch('/deleteMe',authController.protect,userController.deleteMe);
 
+userRouter.post('/logout',authController.protect,authController.clearCookieLogout);
+
 
 module.exports = userRouter;
 

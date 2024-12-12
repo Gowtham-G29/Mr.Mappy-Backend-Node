@@ -2,6 +2,7 @@ const User = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const Email = require('../utils/email');
+const path = require('path');
 
 
 //send Token if all the logging conditions are satisfied
@@ -321,4 +322,12 @@ exports.updateCurrentUserPassword = async (req, res, next) => {
             message: error.message
         });
     }
+}
+
+exports.clearCookieLogout = (req, res, next) => {
+    res.clearCookie('jwt', { path: "/" });
+    res.status(200).json({
+        status: 'sucess',
+        message: "Logged out sucessfully"
+    })
 }
