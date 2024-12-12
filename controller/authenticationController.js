@@ -213,7 +213,7 @@ exports.forgotPassword = async (req, res, next) => {
 
         //3)send it to user's email
         try {
-            const resetURL = `${req.protocol}://localhost:8000/resetPassword/${resetToken}`;
+            const resetURL = `${req.protocol}://localhost:5173/resetPassword/${resetToken}`;
             await new Email(user, resetURL).sendPasswordReset();
             res.status(200).json({
                 status: 'Success',
