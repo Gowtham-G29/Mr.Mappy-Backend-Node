@@ -9,6 +9,8 @@ const hpp = require('hpp');
 const compression = require('compression');
 const cors = require('cors');//prevent cross origin requests
 const cookieParser = require('cookie-parser');// get the token form the cookie
+const path = require('path');
+
 
 //Middleware for logging in development 
 if (process.env.NODE_ENV == 'development') {
