@@ -22,6 +22,7 @@ const activityRouter = require('./routes/activityRoutes');
 
 //Global middleware to parse JSON request bodies
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
 
 
