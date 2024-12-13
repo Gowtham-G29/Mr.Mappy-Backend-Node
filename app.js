@@ -45,7 +45,7 @@ app.use(cookieParser());
 
 //Global middleware for protection
 app.use(cors({
-    origin: 'http://localhost:5173',  // Your frontend's URL (update if using another URL)
+    origin: 'https://675ca8b4d13a7e0dd6043a98--gleeful-sprite-4141e2.netlify.app/',  // Your frontend's URL (update if using another URL)
     credentials: true
 }));
 
